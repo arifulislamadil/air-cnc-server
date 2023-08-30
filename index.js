@@ -44,6 +44,37 @@ async function run() {
       res.send(result);
     });
 
+
+    // Get user 
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email
+      const query = {email:email}
+      const result = await usersCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Get all rooms data from database
+    app.get("/rooms", async (req, res) => {
+      const result = await roomsCollection.find().toArray();
+      res.send(result);
+    });
+
+    // Get a rooms data from database
+    app.get("/room/:id", async (req, res) => {
+      const id = req.params.id
+      const query = {_id: new ObjectId(id)}
+      const result = await roomsCollection.findOne(query);
+      res.send(result);
+    });
+
+    // Save a room in database
+    app.post("/rooms", async (req, res) => {
+      const room = req.body;
+      console.log(room);
+      const result = await roomsCollection.insertOne(room);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
